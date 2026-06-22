@@ -10,9 +10,13 @@ export interface IEmployeeService {
 }
 
 import { mockEmployeeService } from './employee.mock';
-// import { graphqlEmployeeService } from './employee.graphql'; // bật ở tuần 3
+import { graphqlEmployeeService } from './employee.graphql';
+import { apiEmployeeService } from './employee.api'; // nhánh B (NestJS)
 
+const source = process.env.NEXT_PUBLIC_DATA_SOURCE;
 export const employeeService: IEmployeeService =
-  process.env.NEXT_PUBLIC_DATA_SOURCE === 'graphql'
-    ? /* graphqlEmployeeService */ mockEmployeeService
-    : mockEmployeeService;
+  source === 'graphql'
+    ? graphqlEmployeeService
+    : source === 'api'
+      ? apiEmployeeService
+      : mockEmployeeService;

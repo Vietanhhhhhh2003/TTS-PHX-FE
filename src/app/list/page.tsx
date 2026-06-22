@@ -14,7 +14,7 @@ import { EmployeeStats } from "@/components/employee/EmployeeStats";
 import { EmployeeFilters } from "@/components/employee/EmployeeFilters";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { Pagination } from "@/components/ui/Pagination";
-import { Modal } from "@/components/ui/Modal";
+import { ImportModal } from "@/components/employee/ImportModal";
 import { DEFAULT_PAGE_SIZE } from "@/lib/utils/constants";
 
 export default function EmployeeListPage() {
@@ -103,6 +103,25 @@ export default function EmployeeListPage() {
               />
             </svg>
             Tải lên
+          </button>
+          <button
+            onClick={() => router.push("/import-history")}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            Lịch sử
           </button>
           <button
             onClick={() => router.push("/add")}
@@ -214,29 +233,15 @@ export default function EmployeeListPage() {
         />
       </div>
 
-      {/* Import modal placeholder */}
-      <Modal
+      {/* Import modal (Tuần 4): đổ raw -> điều hướng sang Lịch sử tải lên */}
+      <ImportModal
         open={importModalOpen}
         onClose={() => setImportModalOpen(false)}
-        title="Tải lên danh sách nhân viên"
-      >
-        <div className="text-sm text-gray-500 text-center py-6">
-          <svg
-            className="w-12 h-12 text-gray-300 mx-auto mb-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-            />
-          </svg>
-          <p>Chức năng Import sẽ triển khai ở Tuần 4.</p>
-        </div>
-      </Modal>
+        onImported={() => {
+          setImportModalOpen(false);
+          router.push("/import-history");
+        }}
+      />
     </div>
   );
 }

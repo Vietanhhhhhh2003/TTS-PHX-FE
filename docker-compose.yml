@@ -26,7 +26,10 @@ services:
       retries: 5
 
   postgraphile:
-    image: graphile/postgraphile:4
+    build:
+      context: .
+      dockerfile: Dockerfile.postgraphile
+    image: employee-postgraphile:4-filter
     container_name: employee_postgraphile
     restart: unless-stopped
     depends_on:
@@ -42,6 +45,23 @@ services:
       - "--watch"
       - "--enhance-graphiql"
       - "--cors"
+      - "--append-plugins"
+      - "postgraphile-plugin-connection-filter"
+
+  # Tuan 4 - Queue: RabbitMQ (gioi thieu producer -> consumer).
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: employee_rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672" # cong AMQP (app noi vao)
+      - "15672:15672" # web console: http://localhost:15672 (guest/guest)
+    healthcheck:
+      # image len cham ~vai chuc giay -> healthcheck de consumer doi RabbitMQ ready
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
 volumes:
   pgdata:

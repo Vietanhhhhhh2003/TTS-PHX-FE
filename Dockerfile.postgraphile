@@ -1,0 +1,6 @@
+# postGraphile + plugin connection-filter (de search ILIKE theo ten/email/ma NV).
+# Image goc khong kem plugin -> cai them vao WORKDIR /postgraphile/ roi --append-plugins khi chay.
+FROM graphile/postgraphile:4
+# Ghim v2.x: dong tuong thich PostGraphile v4 (export CommonJS function).
+# v3+ danh cho PostGraphile v5 (preset) -> CLI v4 bao "expected function, found object".
+RUN npm install --no-package-lock postgraphile-plugin-connection-filter@2.3.0
